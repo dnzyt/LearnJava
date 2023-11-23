@@ -2,6 +2,8 @@ package medium;
 
 import java.util.Stack;
 
+// 1504. Count Submatrices With All Ones
+
 public class Solution1504 {
     public int numSubmat(int[][] mat) {
         int m = mat.length, n = mat[0].length;

@@ -2,6 +2,8 @@ package hard;
 
 import java.util.Stack;
 
+// 1944. Number of Visible People in a Queue
+
 public class Solution1944 {
     public int[] canSeePersonsCount(int[] heights) {
         Stack<Integer> stack = new Stack<>();

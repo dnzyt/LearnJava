@@ -3,6 +3,8 @@ package medium;
 import java.util.List;
 import java.util.Stack;
 
+// 2866. Beautiful Towers II
+
 public class Solution2866 {
     public long maximumSumOfHeights(List<Integer> maxHeights) {
         int n = maxHeights.size();

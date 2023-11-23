@@ -1,11 +1,14 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
-        Integer total = list.stream().reduce(2, Integer::sum);
-        Integer i = list.stream().min(Integer::compareTo).orElseThrow();
-        System.out.println(i);
+        Stack<Integer> s = new Stack<>();
+        s.push(5);
+        s.push(4);
+        s.push(2);
+        for (int i = 0; i < s.size(); i++)
+            System.out.println(s.get(i));
     }
 }

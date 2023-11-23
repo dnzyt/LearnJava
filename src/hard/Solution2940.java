@@ -4,6 +4,8 @@ import javafx.util.Pair;
 
 import java.util.*;
 
+// 2940. Find Building Where Alice and Bob Can Meet
+
 public class Solution2940 {
     public int[] leftmostBuildingQueries(int[] heights, int[][] queries) {
         int[] res = new int[queries.length];

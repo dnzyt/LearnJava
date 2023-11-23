@@ -2,6 +2,8 @@ package medium;
 
 import java.util.Stack;
 
+// 2282. Number of People That Can Be Seen in a Grid
+
 public class Solution2282 {
     public int[][] seePeople(int[][] heights) {
         int m = heights.length, n = heights[0].length;
