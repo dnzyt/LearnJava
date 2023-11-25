@@ -1,14 +1,21 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Stack<Integer> s = new Stack<>();
-        s.push(5);
-        s.push(4);
-        s.push(2);
-        for (int i = 0; i < s.size(); i++)
-            System.out.println(s.get(i));
+        List<Integer> s = new ArrayList<>();
+        s.add(1);
+        s.add(2);
+        s.add(3);
+        s.add(3);
+        s.add(3);
+        s.add(4);
+        s.add(4);
+        s.add(4);
+        s.add(4);
+        int idx = Collections.binarySearch(s, 3);
+
+        System.out.println(idx);
+//        System.out.println("complement: " + (~idx));
+
     }
 }
