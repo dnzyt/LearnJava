@@ -15,9 +15,6 @@ public class UnionFind {
     }
 
     public void union(int x, int y) {
-        int px = find(x);
-        int py = find(y);
-        if (px != py)
-            parent[px] = py;
+        parent[find(x)] = find(y);
     }
 }
