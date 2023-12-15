@@ -2,6 +2,8 @@ package medium;
 
 // 105. Construct Binary Tree from Preorder and Inorder Traversal
 
+import util.TreeNode;
+
 import java.util.Arrays;
 
 public class Solution105 {

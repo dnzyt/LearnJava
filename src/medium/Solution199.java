@@ -2,6 +2,8 @@ package medium;
 
 // 199. Binary Tree Right Side View
 
+import util.TreeNode;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
