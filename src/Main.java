@@ -14,7 +14,8 @@ public class Main {
 //        int[] nums = e.numOfPrimes(100);
 //        for (int i = 0; i < nums.length; i++)
 //            System.out.println(i + "---" + nums[i]);
-        QuickPow q = new QuickPow();
-        System.out.println(q.pow(2, 3));
+//        QuickPow q = new QuickPow();
+//        System.out.println(q.pow(2, 3));
+        System.out.println(-1%9);
     }
 }

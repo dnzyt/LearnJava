@@ -4,29 +4,7 @@ package medium;
 
 import java.util.*;
 
-class UF {
-    Map<String, String> parents;
 
-    public UF(List<String> ss) {
-        parents = new HashMap<>();
-        for (String s : ss) {
-            parents.put(s, s);
-        }
-    }
-
-    public String find(String a) {
-        while (!a.equals(parents.get(a)))
-            parents.put(a, find(parents.get(a)));
-        return parents.get(a);
-    }
-
-    public void union(String a, String b) {
-        String pa = find(a);
-        String pb = find(b);
-        if (!pa.equals(pb))
-            parents.put(pa, pb);
-    }
-}
 
 public class Solution721 {
 
@@ -62,6 +40,30 @@ public class Solution721 {
 
         return r;
 
+    }
+
+    static class UF {
+        Map<String, String> parents;
+
+        public UF(List<String> ss) {
+            parents = new HashMap<>();
+            for (String s : ss) {
+                parents.put(s, s);
+            }
+        }
+
+        public String find(String a) {
+            while (!a.equals(parents.get(a)))
+                parents.put(a, find(parents.get(a)));
+            return parents.get(a);
+        }
+
+        public void union(String a, String b) {
+            String pa = find(a);
+            String pb = find(b);
+            if (!pa.equals(pb))
+                parents.put(pa, pb);
+        }
     }
 
 }
