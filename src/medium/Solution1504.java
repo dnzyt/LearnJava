@@ -16,6 +16,7 @@ public class Solution1504 {
             for (int j = 0; j < n; j++)
                 h[j + 1] = mat[i][j] == 0 ? 0 : h[j + 1] + 1;
             stack.push(0);
+            // 用c记录当前列和左边的各个列能做成多少sub matrix
             int c = 0;
             for (int j = 0; j < n; j++) {
                 while (!stack.empty() && h[j + 1] < h[stack.peek()]) {
