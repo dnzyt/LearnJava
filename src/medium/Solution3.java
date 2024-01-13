@@ -15,7 +15,7 @@ public class Solution3 {
         for (int i = 0; i < s.length(); i++) {
             while (j <= i && visited.contains(ss[i])) {
                 visited.remove(ss[j]);
-                j ++;
+                j++;
             }
             visited.add(ss[i]);
             res = Math.max(res, i - j + 1);
