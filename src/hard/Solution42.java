@@ -8,35 +8,17 @@ public class Solution42 {
 
     public int trap(int[] height) {
         int n = height.length;
-        Stack<Integer> s = new Stack<>();
+        int lmax = 0, rmax = 0;
         int[] preHighest = new int[n];
         int[] nextHighest = new int[n];
 
         for (int i = 0; i < n; i++) {
-            if (s.empty()) {
-                s.push(i);
-                continue;
-            }
-            if (height[s.peek()] > height[i]) {
-                Integer idx = s.peek();
-                preHighest[i] = height[idx];
-            } else {
-                s.push(i);
-            }
+            preHighest[i] = lmax;
+            lmax = Math.max(lmax, height[i]);
         }
-        s.clear();
         for (int i = n - 1; i >= 0; i--) {
-            if (s.empty()) {
-                s.push(i);
-                continue;
-            }
-            if (height[s.peek()] > height[i]) {
-                Integer idx = s.peek();
-                nextHighest[i] = height[idx];
-            } else {
-                s.push(i);
-            }
-
+            nextHighest[i] = rmax;
+            rmax = Math.max(rmax, height[i]);
         }
         int res = 0;
         for (int i = 0; i < n; i++) {
