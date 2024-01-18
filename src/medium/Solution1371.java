@@ -2,13 +2,44 @@ package medium;
 
 // 1371. Find the Longest Substring Containing Vowels in Even Counts
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Solution1371 {
     public int findTheLongestSubstring(String s) {
+        int[] map = new int[32];
+        Arrays.fill(map, -2);
+        map[0] = -1;
+        int res = 0;
+        int status = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char curr = s.charAt(i);
+            int m = move(curr);
+            if (m != -1)
+                status ^= (1 << m);
+            if (map[status] != -2)
+                res = Math.max(res, i - map[status]);
+            else
+                map[status] = i;
+        }
+        return res;
+    }
+
+    private int move(char ch) {
+        return switch (ch) {
+            case 'a' -> 0;
+            case 'e' -> 1;
+            case 'i' -> 2;
+            case 'o' -> 3;
+            case 'u' -> 4;
+            default -> -1;
+        };
+    }
+
+
+
+
+
+    public int findTheLongestSubstring1(String s) {
         int n = s.length();
         List<Integer> la = new ArrayList<>();
         List<Integer> le = new ArrayList<>();
