@@ -12,12 +12,38 @@ public class Solution300 {
         int[] temp = new int[n];
         Arrays.fill(temp, Integer.MAX_VALUE / 2);
         for (int i = 0; i < n; i++) {
-            int idx = Arrays.binarySearch(temp, nums[i]);
-            idx = idx < 0 ? (~idx) : idx;
+            int idx = lowerBound(temp, nums[i]);
             res[i] = idx + 1;
             temp[idx] = Math.min(temp[idx], nums[i]);
         }
+        int ans = Integer.MIN_VALUE;
+        for (int v : res)
+            ans = Math.max(ans, v);
+        return ans;
 
-        return Arrays.stream(res).max().orElseThrow();
+    }
+
+    private int lowerBound(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] < target)
+                l = mid + 1;
+            else
+                r = mid - 1;
+        }
+        return l;
+    }
+
+    private int upperBound(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] > target)
+                r = mid - 1;
+            else
+                l = mid + 1;
+        }
+        return l;
     }
 }
