@@ -9,18 +9,18 @@ public class Solution3 {
 
     public int lengthOfLongestSubstring(String s) {
         char[] ss = s.toCharArray();
-        Set<Character> visited = new HashSet<>();
-        int j = 0;
-        int res = 0;
-        for (int i = 0; i < s.length(); i++) {
-            while (j <= i && visited.contains(ss[i])) {
-                visited.remove(ss[j]);
-                j++;
+        int[] count = new int[128];
+        int ans = 0;
+        int i = 0;
+        for (int j = 0; j < ss.length; j++) {
+            count[ss[j]] ++;
+            while (count[ss[j]] > 1) {
+                count[ss[i]] --;
+                i ++;
             }
-            visited.add(ss[i]);
-            res = Math.max(res, i - j + 1);
+            ans = Math.max(ans, j - i + 1);
         }
-        return res;
+        return ans;
     }
 
 }

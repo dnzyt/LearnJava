@@ -30,4 +30,27 @@ public class Solution42 {
         return res;
     }
 
+    public int trap2(int[] height) {
+        // 相向双指针
+        // 更矮的那一边的储水量是可以确定的
+        int res = 0;
+        int n = height.length;
+        int left = 0;
+        int right = n - 1;
+        int preMax = 0;
+        int sufMax = 0;
+        while (left < right) {
+            preMax = Math.max(preMax, height[left]);
+            sufMax = Math.max(sufMax, height[right]);
+            if (preMax < sufMax) {
+                res += preMax - height[left];
+                left ++;
+            } else {
+                res += sufMax - height[right];
+                right --;
+            }
+        }
+        return res;
+    }
+
 }

@@ -22,7 +22,7 @@ public class Solution15 {
                 } else if (total > 0) {
                     r --;
                 } else {
-                    res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+                    res.add(List.of(nums[i], nums[l], nums[r]));
                     while (l < r && nums[l] == nums[l - 1])
                         l ++;
                 }

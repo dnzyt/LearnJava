@@ -3,7 +3,6 @@ package medium;
 // 494. Target Sum
 
 import java.util.Arrays;
-import java.util.Collections;
 
 public class Solution494 {
     // sum(A) = (total + target) / 2
