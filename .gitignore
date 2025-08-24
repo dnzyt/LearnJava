@@ -27,9 +27,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/.idea
-/.idea/misc.xml
-/LearnJava.iml
-/.idea/.gitignore
-/.idea/vcs.xml
-/.idea/modules.xml
+.idea/
+
