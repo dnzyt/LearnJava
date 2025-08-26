@@ -35,4 +35,20 @@ public class Solution199 {
         return res;
     }
 
+    // 递归
+    public List<Integer> rightSideView2(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        dfs(root, ans, 0);
+        return ans;
+    }
+
+    private void dfs(TreeNode root, List<Integer> ans, int depth) {
+        if (root == null) return;
+        if (depth == ans.size()) {
+            ans.add(root.val);
+        }
+        dfs(root.right, ans, depth + 1);
+        dfs(root.left, ans, depth + 1);
+    }
+
 }
