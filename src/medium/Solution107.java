@@ -1,30 +1,30 @@
 package medium;
 
-// 102. Binary Tree Level Order Traversal
+// 107. Binary Tree Level Order Traversal II
 
 import util.TreeNode;
 
 import java.util.*;
 
-public class Solution102 {
-
-    public List<List<Integer>> levelOrder(TreeNode root) {
+public class Solution107 {
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
         if (root == null) return List.of();
         List<List<Integer>> ans = new ArrayList<>();
         Queue<TreeNode> q = new ArrayDeque<>();
         q.offer(root);
         while (!q.isEmpty()) {
             int n = q.size();
-            List<Integer> t = new ArrayList<>();
+            List<Integer> temp = new ArrayList<>();
             while (n-- > 0) {
                 TreeNode curr = q.poll();
-                t.add(curr.val);
+                temp.add(curr.val);
                 if (curr.left != null) q.offer(curr.left);
                 if (curr.right != null) q.offer(curr.right);
             }
-            ans.add(t);
+            ans.add(temp);
         }
+
+        Collections.reverse(ans);
         return ans;
     }
-
 }

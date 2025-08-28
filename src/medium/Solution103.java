@@ -1,30 +1,29 @@
 package medium;
 
-// 102. Binary Tree Level Order Traversal
+// 103. Binary Tree Zigzag Level Order Traversal
 
 import util.TreeNode;
 
 import java.util.*;
 
-public class Solution102 {
-
-    public List<List<Integer>> levelOrder(TreeNode root) {
+public class Solution103 {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         if (root == null) return List.of();
         List<List<Integer>> ans = new ArrayList<>();
         Queue<TreeNode> q = new ArrayDeque<>();
         q.offer(root);
         while (!q.isEmpty()) {
             int n = q.size();
-            List<Integer> t = new ArrayList<>();
+            List<Integer> temp = new ArrayList<>(n);
             while (n-- > 0) {
                 TreeNode curr = q.poll();
-                t.add(curr.val);
+                temp.add(curr.val);
                 if (curr.left != null) q.offer(curr.left);
                 if (curr.right != null) q.offer(curr.right);
             }
-            ans.add(t);
+            if (ans.size() % 2 > 0) Collections.reverse(temp);
+            ans.add(temp);
         }
         return ans;
     }
-
 }
