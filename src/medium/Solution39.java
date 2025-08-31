@@ -7,24 +7,29 @@ import java.util.List;
 
 public class Solution39 {
 
+    private List<Integer> path = new ArrayList<>();
+    private List<List<Integer>> ans = new ArrayList<>();
+
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        return combination(candidates, 0, target);
+        dfs(0, candidates, target);
+        return ans;
     }
 
-    private List<List<Integer>> combination(int[] candidates, int start, int target) {
-        List<List<Integer>> res = new ArrayList<>();
+    private void dfs(int i, int[] nums, int target) {
+        if (target < 0) return;
         if (target == 0) {
-            res.add(new ArrayList<>());
-            return res;
+            ans.add(new ArrayList<>(path));
+            return;
         }
-        for (int i = start; i < candidates.length; i++) {
-            int curr = candidates[i];
-            if (target < curr) continue;
-            for (List<Integer> temp : combination(candidates, i, target - curr)) {
-                temp.add(curr);
-                res.add(temp);
-            }
-        }
-        return res;
+
+        if (i == nums.length) return;
+
+        path.add(nums[i]);
+        dfs(i, nums, target - nums[i]); // 可以有重复数字
+        path.remove(path.size() - 1);
+        dfs(i + 1, nums, target);
+
     }
+
+
 }
