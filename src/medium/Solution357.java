@@ -4,17 +4,24 @@ package medium;
 
 public class Solution357 {
 
+    private int ans;
     public int countNumbersWithUniqueDigits(int n) {
-        int res = 0;
-        for (int i = 1; i <= n; i++)
-            res += A(10, i) - A(9, i - 1);
-        return res;
+        boolean[] onPath = new boolean[10];
+        dfs(1, n, onPath);
+        return ans + 1;
     }
 
-    private int A(int n, int m) {
-        int res = 1;
-        for (int i = n; i > n - m; i--)
-            res *= i;
-        return res;
+    private void dfs(int i, int n, boolean[] onPath) {
+        if (i > n) return;
+        for (int j = 0; j < 10; j ++) {
+            if (onPath[j]) continue;
+            if (i == 1 && j == 0) continue;
+            onPath[j] = true;
+            ans ++;
+            dfs(i + 1, n, onPath);
+            onPath[j] = false;
+        }
     }
+
+
 }

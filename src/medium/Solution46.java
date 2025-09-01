@@ -2,35 +2,35 @@ package medium;
 
 // 46. Permutations
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.*;
+
 
 public class Solution46 {
+    // O(n*n!)
+    private List<Integer> path = new ArrayList<>();
+    private List<List<Integer>> ans = new ArrayList<>();
 
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (nums.length == 1) {
-            res.add(List.of(nums[0]));
-            return res;
-        }
-
-        for (int i = 0; i < nums.length; i++) {
-            IntStream s1 = Arrays.stream(nums, 0, i);
-            IntStream s2 = Arrays.stream(nums, i + 1, nums.length);
-            int[] temp = IntStream.concat(s1, s2).toArray();
-            for (List<Integer> sub : permute(temp)) {
-                List<Integer> curr = new ArrayList<>();
-                curr.add(nums[i]);
-                curr.addAll(sub);
-                res.add(curr);
-            }
-        }
-        return res;
-
+        List<Integer> l = Arrays.stream(nums).boxed().toList();
+        Set<Integer> s = new HashSet<>(l);
+        boolean[] onPath = new boolean[nums.length];
+        dfs(nums, onPath);
+        return ans;
     }
 
+    private void dfs(int[] nums, boolean[] onPath) {
+        if (path.size() == nums.length) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (onPath[i]) continue;
+            onPath[i] = true;
+            path.add(nums[i]);
+            dfs(nums, onPath);
+            path.remove(nums[i]);
+            onPath[i] = false;
+        }
+    }
 
 }
