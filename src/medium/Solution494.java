@@ -5,28 +5,48 @@ package medium;
 import java.util.Arrays;
 
 public class Solution494 {
-    // sum(A) = (total + target) / 2
+
     public int findTargetSumWays(int[] nums, int target) {
-        int total = Arrays.stream(nums).sum();
-        if (target > total || ((total & 1) ^ (target & 1)) == 1)
-            return 0;
-        return numOfSubsets(nums, (total + target) >> 1);
+        int n = nums.length;
+        int s = Arrays.stream(nums).sum();
+        if (target + s < 0 || (target + s) % 2 != 0) return 0;
+        int cap = (target + s) / 2;
+
+        int[][] memo = new int[n][cap + 1];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        return dfs(n - 1, cap, nums, memo);
     }
 
-    // 转换成了01背包问题
-    // nums中有多少种选法，可以达成和为target
-    // dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i]]
-    // 虽然是2维dp，但是可以转换为1维dp
-    private int numOfSubsets(int[] nums, int target) {
-        if (target < 0)
-            return 0;
-        int[] dp = new int[target + 1];
-        dp[0] = 1; // 前0个元素种组成和为0的方法有1种
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = target; j >= nums[i]; j--) {
-                dp[j] += dp[j - nums[i]];
+    private int dfs(int i, int capacity, int[] nums, int[][] memo) {
+        if (i < 0) {
+            return capacity == 0 ? 1 : 0;
+        }
+        if (memo[i][capacity] != -1) return memo[i][capacity];
+        memo[i][capacity] = dfs(i - 1, capacity, nums, memo);
+        if (capacity >= nums[i]) {
+            memo[i][capacity] += dfs(i - 1, capacity - nums[i], nums, memo);
+        }
+
+        return memo[i][capacity];
+    }
+
+    // f[i][c] = f[i-1][c-nums[i]] + f[i-1][c]
+
+    public int findTargetSumWays2(int[] nums, int target) {
+        int n = nums.length;
+        int s = Arrays.stream(nums).sum();
+        if (target + s < 0 || (target + s) % 2 != 0) return 0;
+        int cap = (target + s) / 2;
+        int[][] f = new int[n + 1][cap + 1];
+        f[0][0] = 1;
+        for (int i = 0; i < n; i++) {
+            for (int c = 0; c < cap + 1; c++) {
+                f[i + 1][c] = f[i][c];
+                if (c >= nums[i]) f[i + 1][c] += f[i][c - nums[i]];
             }
         }
-        return dp[target];
+        return f[n][cap];
     }
 }
