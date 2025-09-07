@@ -2,6 +2,8 @@ package medium;
 
 // 1143. Longest Common Subsequence
 
+import java.util.Arrays;
+
 public class Solution1143 {
     public int longestCommonSubsequence(String text1, String text2) {
         int m = text1.length();
