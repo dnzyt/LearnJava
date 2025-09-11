@@ -3,21 +3,14 @@ package hard;
 // 297. Serialize and Deserialize Binary Tree
 
 
+import util.TreeNode;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Solution297 {
-     static class TreeNode {
-         int val;
-         TreeNode left;
-         TreeNode right;
-
-         TreeNode(int x) {
-             val = x;
-         }
-     }
 
     class Codec {
         // Encodes a tree to a single string.
