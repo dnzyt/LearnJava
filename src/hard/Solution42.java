@@ -2,6 +2,8 @@ package hard;
 
 // 42. Trapping Rain Water
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 public class Solution42 {
@@ -44,13 +46,31 @@ public class Solution42 {
             sufMax = Math.max(sufMax, height[right]);
             if (preMax < sufMax) {
                 res += preMax - height[left];
-                left ++;
+                left++;
             } else {
                 res += sufMax - height[right];
-                right --;
+                right--;
             }
         }
         return res;
+    }
+
+    // 单调栈
+    public int trap3(int[] height) {
+        int n = height.length;
+        int ans = 0;
+        Deque<Integer> st = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            int h = height[i];
+            while (!st.isEmpty() && h >= height[st.peek()]) {
+                int bottomHeight = height[st.pop()];
+                if (st.isEmpty()) break;
+                int left = st.peek();
+                ans += (Math.min(h, height[left]) - bottomHeight) * (i - left - 1);
+            }
+            st.push(i);
+        }
+        return ans;
     }
 
 }

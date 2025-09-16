@@ -1,23 +1,27 @@
 package hard;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
 // 1944. Number of Visible People in a Queue
 
 public class Solution1944 {
     public int[] canSeePersonsCount(int[] heights) {
-        Stack<Integer> stack = new Stack<>();
-        int[] res = new int[heights.length];
-        for (int i = heights.length-1; i >= 0; i--) {
-            int count = 0;
-            while (!stack.empty() && heights[stack.peek()] < heights[i]) {
-                stack.pop();
-                count += 1;
-            }
+        int n = heights.length;
+        int[] ans = new int[n];
+        Deque<Integer> st = new ArrayDeque<>();
 
-            res[i] = count + (stack.empty() ? 0 : 1);
-            stack.push(i);
+        for (int i = n - 1; i >= 0; i--) {
+            int h = heights[i];
+            int cnt = 0;
+            while (!st.isEmpty() && h >= heights[st.peek()]) {
+                cnt++;
+                st.pop();
+            }
+            ans[i] = cnt + (st.isEmpty() ? 0 : 1);
+            st.push(i);
         }
-        return res;
+        return ans;
     }
 }
