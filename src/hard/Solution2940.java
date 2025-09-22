@@ -1,6 +1,7 @@
 package hard;
 
 import javafx.util.Pair;
+import util.SimpleSegmentTree;
 
 import java.util.*;
 
@@ -8,42 +9,52 @@ import java.util.*;
 
 public class Solution2940 {
     public int[] leftmostBuildingQueries(int[] heights, int[][] queries) {
-        int[] res = new int[queries.length];
-        Arrays.fill(res, -1);
-        List<List<Pair<Integer, Integer>>> query = new ArrayList<>();
-        for (int i = 0; i < heights.length; i++)
-            query.add(new ArrayList<>());
+        int[] ans = new int[queries.length];
+        Arrays.fill(ans, -1);
+        List<int[]>[] qs = new ArrayList[heights.length];
+        Arrays.setAll(qs, i -> new ArrayList<>());
+
         for (int i = 0; i < queries.length; i++) {
-            int aIdx = queries[i][0];
-            int bIdx = queries[i][1];
-            if (aIdx == bIdx) {
-                res[i] = aIdx;
-                continue;
+            if (queries[i][0] > queries[i][1]) {
+                int t = queries[i][0];
+                queries[i][0] = queries[i][1];
+                queries[i][1] = t;
             }
-            if (aIdx < bIdx && heights[aIdx] < heights[bIdx]) {
-                res[i] = bIdx;
-                continue;
+            if (queries[i][0] == queries[i][1] || heights[queries[i][0]] < heights[queries[i][1]])
+                ans[i] = queries[i][1];
+            else {
+                qs[queries[i][1]].add(new int[] {heights[queries[i][0]], i});
             }
-            if (bIdx < aIdx && heights[bIdx] < heights[aIdx]) {
-                res[i] = aIdx;
-                continue;
-            }
-            int idx = Math.max(aIdx, bIdx);
-            int highest = Math.max(heights[aIdx], heights[bIdx]);
-            query.get(idx).add(new Pair<>(highest, i));
         }
-
-        PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>(Comparator.comparing(Pair::getKey));
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
         for (int i = 0; i < heights.length; i++) {
-            while (!pq.isEmpty() && pq.peek().getKey() < heights[i]) {
-                var p = pq.poll();
-                res[p.getValue()] = i;
+            int currHeight = heights[i];
+            while (!pq.isEmpty() && pq.peek()[0] < currHeight) {
+                ans[pq.poll()[1]] = i;
             }
-            for (Pair p: query.get(i)) {
-                pq.add(p);
-            }
-
+            for (int[] q : qs[i])
+                pq.offer(q);
         }
-        return res;
+
+        return ans;
+    }
+
+    public int[] leftmostBuildingQueries2(int[] heights, int[][] queries) {
+        SimpleSegmentTree st = new SimpleSegmentTree(heights);
+        int n = heights.length;
+        int[] ans = new int[queries.length];
+        for (int i = 0; i < queries.length; i++) {
+            int[] q = queries[i];
+            int aIdx = q[0];
+            int bIdx = q[1];
+            if (aIdx > bIdx) {
+                int t = aIdx;
+                aIdx = bIdx;
+                bIdx = t;
+            }
+            if (aIdx == bIdx || heights[aIdx] < heights[bIdx]) ans[i] = bIdx;
+            else ans[i] = st.findFirstInRange(bIdx + 1, heights.length - 1, heights[aIdx] + 1);
+        }
+        return ans;
     }
 }
