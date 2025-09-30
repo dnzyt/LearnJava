@@ -7,23 +7,17 @@ import java.util.Map;
 
 public class Solution930 {
     public int numSubarraysWithSum(int[] nums, int goal) {
-        int n = nums.length;
-        int[] presum = new int[n];
-        int t = 0;
-        for (int i = 0; i < n; i++) {
-            t += nums[i];
-            presum[i] = t;
+        Map<Integer, Integer> cnt = new HashMap<>();
+        cnt.put(0, 1);
+        int ans = 0;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+            if (cnt.containsKey(sum - goal))
+                ans += cnt.get(sum - goal);
+            cnt.put(sum, cnt.getOrDefault(sum, 0) + 1);
         }
-        Map<Integer, Integer> m = new HashMap<>();
-        m.put(0, 1);
-        int res = 0;
-        for (int i = 0; i < n; i++) {
-            int diff = presum[i] - goal;
-            if (m.containsKey(diff)) {
-                res += m.get(diff);
-            }
-            m.put(presum[i], m.getOrDefault(presum[i], 0) + 1);
-        }
-        return res;
+
+        return ans;
     }
 }
