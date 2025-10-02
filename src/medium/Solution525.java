@@ -7,28 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Solution525 {
-
+    // 前缀和 + hash
     public int findMaxLength(int[] nums) {
-        int n = nums.length;
-        for (int i = 0; i < n; i++) {
-            if (nums[i] == 0)
-                nums[i] = -1;
+        for (int i = 0; i < nums.length; i++)
+            if (nums[i] == 0) nums[i] = -1;
+        Map<Integer, Integer> cnt = new HashMap<>();
+        cnt.put(0, -1);
+        int ans = 0, sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (cnt.containsKey(sum))
+                ans = Math.max(ans, i - cnt.get(sum));
+            else
+                cnt.put(sum, i);
         }
-        int[] presum = new int[n];
-        int t = 0;
-        Map<Integer, Integer> m = new HashMap<>();
-        m.put(0, -1);
-        for (int i = 0; i < n; i++) {
-            t = t + nums[i];
-            presum[i] = t;
-            if (!m.containsKey(t))
-                m.put(t, i);
-        }
-        int res = 0;
-        for (int i = 0; i < n; i++) {
-            res = Math.max(res, i - m.get(presum[i]));
-        }
-        return res;
+        return ans;
     }
 
 }
