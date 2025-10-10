@@ -1,0 +1,16 @@
+package easy;
+
+
+// 1720. Decode XORed Array
+
+public class Solution1720 {
+    public int[] decode(int[] encoded, int first) {
+        int n = encoded.length;
+        int[] ans = new int[n + 1];
+        ans[0] = first;
+        for (int i = 0; i < n; i++) {
+            ans[i + 1] = encoded[i] ^ ans[i];
+        }
+        return ans;
+    }
+}
