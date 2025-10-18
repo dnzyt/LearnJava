@@ -36,9 +36,6 @@ public class Solution1371 {
     }
 
 
-
-
-
     public int findTheLongestSubstring1(String s) {
         int n = s.length();
         List<Integer> la = new ArrayList<>();
@@ -49,15 +46,15 @@ public class Solution1371 {
         int ca = 0, ce = 0, ci = 0, co = 0, cu = 0;
         for (Character ch : s.toCharArray()) {
             if (ch == 'a')
-                ca ++;
+                ca++;
             else if (ch == 'e')
-                ce ++;
+                ce++;
             else if (ch == 'i')
-                ci ++;
+                ci++;
             else if (ch == 'o')
-                co ++;
+                co++;
             else if (ch == 'u')
-                cu ++;
+                cu++;
             la.add(ca);
             le.add(ce);
             li.add(ci);
@@ -81,4 +78,43 @@ public class Solution1371 {
         }
         return res;
     }
+
+    // 前缀异或和+哈希
+    public int findTheLongestSubstring3(String s) {
+        int n = s.length();
+        int[] presum = new int[n + 1];
+        char[] c = s.toCharArray();
+        for (int i = 0; i < n; i++) {
+            int idx = convert(c[i]);
+            if (idx == -1)
+                presum[i + 1] = presum[i];
+            else
+                presum[i + 1] = presum[i] ^ (1 << idx);
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (map.containsKey(presum[i + 1])) {
+                int l = map.get(presum[i + 1]);
+                ans = Math.max(ans, i - l);
+            } else {
+                map.put(presum[i + 1], i);
+            }
+        }
+        return ans;
+    }
+
+    private int convert(char a) {
+        return switch (a) {
+            case 'a' -> 0;
+            case 'e' -> 1;
+            case 'i' -> 2;
+            case 'o' -> 3;
+            case 'u' -> 4;
+            default -> -1;
+        };
+    }
+
+
 }
