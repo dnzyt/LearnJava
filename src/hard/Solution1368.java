@@ -4,12 +4,11 @@ package hard;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 
 public class Solution1368 {
     // 01-BFS,不是普通BFS
     public int minCost(int[][] grid) {
-        int[][] dirs = { {}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int[][] dirs = {{}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}};
         int m = grid.length, n = grid[0].length;
         int[][] distance = new int[m][n];
         for (int i = 0; i < m; i++)
@@ -17,7 +16,7 @@ public class Solution1368 {
                 distance[i][j] = Integer.MAX_VALUE;
         distance[0][0] = 0;
         Deque<int[]> queue = new ArrayDeque<>();
-        queue.offer(new int[] {0, 0});
+        queue.offer(new int[]{0, 0});
         while (!queue.isEmpty()) {
             int[] curr = queue.poll();
             int x = curr[0];
@@ -32,9 +31,9 @@ public class Solution1368 {
                     if (distance[x][y] + weight < distance[nx][ny]) {
                         distance[nx][ny] = distance[x][y] + weight;
                         if (weight == 0)
-                            queue.offerFirst(new int[] {nx, ny});
+                            queue.offerFirst(new int[]{nx, ny});
                         else
-                            queue.offer(new int[] {nx, ny});
+                            queue.offer(new int[]{nx, ny});
                     }
                 }
 
