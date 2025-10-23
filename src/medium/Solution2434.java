@@ -1,31 +1,31 @@
 package medium;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 // 2434. Using a Robot to Print the Lexicographically Smallest String
 
 public class Solution2434 {
     public String robotWithString(String s) {
-        char[] ss = s.toCharArray();
-        char[] suff = new char[ss.length];
-        char smallest = 'z';
-        for (int i = ss.length-1; i >= 0; i--) {
-            smallest = ss[i] < smallest ? ss[i] : smallest;
-            suff[i] = smallest;
+        int n = s.length();
+        char[] chs = s.toCharArray();
+        char[] rightSmallest = new char[n];
+        rightSmallest[n - 1] = chs[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            rightSmallest[i] = (char) Math.min(chs[i], rightSmallest[i + 1]);
         }
         StringBuilder sb = new StringBuilder();
-        int i = 0;
-        Stack<Character> stack = new Stack<>();
-        while (i < ss.length) {
-            if (stack.empty() || stack.peek() > suff[i]) {
-                stack.push(ss[i]);
-                i ++;
-            } else {
-                sb.append(stack.pop());
+        List<Character> st = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && st.get(st.size() - 1) <= rightSmallest[i]) {
+                char last = st.remove(st.size() - 1);
+                sb.append(last);
             }
+            st.add(chs[i]);
         }
-        while (!stack.empty())
-            sb.append(stack.pop());
+        while (!st.isEmpty()) {
+            sb.append(st.remove(st.size() - 1));
+        }
         return sb.toString();
     }
 }
