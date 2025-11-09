@@ -1,20 +1,39 @@
 package util;
 
+import java.util.Arrays;
+
 public class UnionFind {
-    public int[] parent;
+    private final int[] fa;
+    private final int[] size;
+    public int count;
+
     public UnionFind(int n) {
-        parent = new int[n];
+        fa = new int[n];
         for (int i = 0; i < n; i++)
-            parent[i] = i;
+            fa[i] = i;
+        size = new int[n];
+        Arrays.fill(size, 1);
+        count = n;
     }
 
     public int find(int x) {
-        if (parent[x] != x)
-            parent[x] = find(parent[x]);
-        return parent[x];
+        if (fa[x] != x)
+            fa[x] = find(fa[x]);
+        return fa[x];
     }
 
-    public void union(int x, int y) {
-        parent[find(x)] = find(y);
+    public boolean merge(int from, int to) {
+        int x = find(from);
+        int y = find(to);
+        if (x == y)
+            return false;
+        fa[x] = y;
+        size[y] += size[x];
+        count--;
+        return true;
+    }
+
+    public int getSize(int x) {
+        return size[find(x)];
     }
 }

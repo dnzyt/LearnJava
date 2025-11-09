@@ -2,68 +2,67 @@ package medium;
 
 // 721. Accounts Merge
 
-import java.util.*;
-
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Solution721 {
+    private Map<String, String> pa;
 
     public List<List<String>> accountsMerge(List<List<String>> accounts) {
-        Set<String> emails = new HashSet<>();
+        pa = new HashMap<>();
         Map<String, String> emailToName = new HashMap<>();
-        for (List<String> account : accounts) {
-            String name = account.get(0);
-            for (int i = 1; i < account.size(); i++) {
-                emails.add(account.get(i));
-                emailToName.put(account.get(i), name);
+        for (List<String> s : accounts) {
+            String name = s.getFirst();
+            for (int i = 1; i < s.size(); i++) {
+                emailToName.put(s.get(i), name);
+                pa.put(s.get(i), s.get(i));
             }
         }
-        UF uf = new UF(emails.stream().toList());
-        for (List<String> account : accounts) {
-            String s = account.get(1);
-            for (int i = 2; i < account.size(); i++)
-                uf.union(s, account.get(i));
+
+        for (List<String> s : accounts) {
+            String t = s.get(1);
+            for (int i = 2; i < s.size(); i++)
+                merge(t, s.get(i));
         }
-        Map<String, List<String>> res = new HashMap<>();
-        for (String email : emails) {
-            String pa = uf.find(email);
-            res.computeIfAbsent(pa, (k -> new ArrayList<>())).add(email);
+
+
+        Map<String, List<String>> map = new HashMap<>();
+        for (String email : emailToName.keySet()) {
+            String parent = find(email);
+            if (!map.containsKey(parent))
+                map.put(parent, new ArrayList<>());
+            map.get(parent).add(email);
         }
-        List<List<String>> r = new ArrayList<>();
-        res.forEach((k, v) -> {
+
+        List<List<String>> ans = new ArrayList<>();
+        for (String email : map.keySet()) {
             List<String> t = new ArrayList<>();
-            Collections.sort(v);
-            t.add(emailToName.get(k));
-            t.addAll(v);
-            r.add(t);
-        });
-
-        return r;
+            map.get(email).sort(String::compareTo);
+            t.add(emailToName.get(email));
+            t.addAll(map.get(email));
+            ans.add(t);
+        }
+        return ans;
 
     }
 
-    static class UF {
-        Map<String, String> parents;
 
-        public UF(List<String> ss) {
-            parents = new HashMap<>();
-            for (String s : ss) {
-                parents.put(s, s);
-            }
-        }
-
-        public String find(String a) {
-            while (!a.equals(parents.get(a)))
-                parents.put(a, find(parents.get(a)));
-            return parents.get(a);
-        }
-
-        public void union(String a, String b) {
-            String pa = find(a);
-            String pb = find(b);
-            if (!pa.equals(pb))
-                parents.put(pa, pb);
-        }
+    public String find(String x) {
+        if (!x.equals(pa.get(x)))
+            pa.put(x, find(pa.get(x)));
+        return pa.get(x);
     }
+
+    public boolean merge(String a, String b) {
+        String x = find(a);
+        String y = find(b);
+        if (x.equals(y))
+            return false;
+        pa.put(x, y);
+        return true;
+    }
+
 
 }
