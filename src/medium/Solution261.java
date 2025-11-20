@@ -20,7 +20,7 @@ public class Solution261 {
             int b = edge[1];
             if (uf.find(a) == uf.find((b)))
                 return false;
-            uf.union(a, b);
+            uf.merge(a, b);
         }
         return true;
     }
