@@ -2,52 +2,47 @@ package medium;
 
 // 210. Course Schedule II
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Solution210 {
 
     // 拓扑排序 - BFS + Queue
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        int[] indegrees = new int[numCourses];
-        Queue<Integer> q = new LinkedList<>();
-        ArrayList<Integer> res = new ArrayList<>();
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i < numCourses; i++)
-            graph.add(new ArrayList<>());
-
+        int[] indegree = new int[numCourses];
+        List<Integer>[] g = new List[numCourses];
+        Arrays.setAll(g, i -> new ArrayList<>());
         for (int[] pre : prerequisites) {
-            indegrees[pre[0]] += 1;
-            graph.get(pre[1]).add(pre[0]);
+            indegree[pre[0]]++;
+            g[pre[1]].add(pre[0]);
         }
-        for (int i = 0; i < numCourses; i++) {
-            if (indegrees[i] == 0) {
+        List<Integer> ans = new ArrayList<>();
+        Queue<Integer> q = new ArrayDeque<>();
+        boolean[] visited = new boolean[numCourses];
+        for (int i = 0; i < numCourses; i++)
+            if (indegree[i] == 0) {
                 q.offer(i);
-                res.add(i);
+                visited[i] = true;
             }
-        }
 
         while (!q.isEmpty()) {
-            int l = q.size();
-            while (l != 0) {
-                int curr = q.poll();
-                l -= 1;
-                for (Integer nxt : graph.get(curr)) {
-                    indegrees[nxt] -= 1;
-                    if (indegrees[nxt] == 0) {
-                        q.offer(nxt);
-                        res.add(nxt);
+            Queue<Integer> t = new ArrayDeque<>();
+            while (!q.isEmpty()) {
+                Integer curr = q.poll();
+                ans.add(curr);
+                for (int nxt : g[curr]) {
+                    indegree[nxt]--;
+                    if (!visited[nxt] && indegree[nxt] == 0) {
+                        t.offer(nxt);
+                        visited[nxt] = true;
                     }
-
                 }
             }
+            q = t;
         }
-        if (res.size() != numCourses)
-            return new int[0];
-        return res.stream().mapToInt(Integer::intValue).toArray();
+        if (ans.size() < numCourses)
+            return new int[]{};
 
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 
 

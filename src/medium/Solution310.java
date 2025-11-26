@@ -2,8 +2,6 @@ package medium;
 
 // 310. Minimum Height Trees
 
-import javafx.util.Pair;
-
 import java.util.*;
 
 public class Solution310 {
@@ -38,7 +36,7 @@ public class Solution310 {
             while (l > 0) {
                 Integer curr = q.pollLast();
                 res += 1;
-                l --;
+                l--;
                 for (Integer nei : graph.get(curr)) {
                     indegrees[nei] -= 1;
                     if (indegrees[nei] == 1)
