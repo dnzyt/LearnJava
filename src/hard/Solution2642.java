@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 public class Solution2642 {
 
+    // Dijkstra
     class Graph {
         private int[][] g;
 
@@ -46,4 +47,46 @@ public class Solution2642 {
         }
     }
 
+
+    // Floyd
+    class Graph2 {
+
+        private int[][] dist;
+        private int n;
+
+        public Graph2(int n, int[][] edges) {
+            int[][] dist = new int[n][n];
+            for (int[] row : dist)
+                Arrays.fill(row, Integer.MAX_VALUE / 3);
+            for (int i = 0; i < n; i++)
+                dist[i][i] = 0;
+
+            for (int[] e : edges)
+                dist[e[0]][e[1]] = e[2];
+
+            for (int k = 0; k < n; k++)
+                for (int i = 0; i < n; i++) {
+                    // if (dist[i][k] == Integer.MAX_VALUE / 3)
+                    //     continue;
+                    for (int j = 0; j < n; j++)
+                        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+
+            this.dist = dist;
+            this.n = n;
+        }
+
+        public void addEdge(int[] edge) {
+            if (edge[2] >= dist[edge[0]][edge[1]])
+                return;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++)
+                    dist[i][j] = Math.min(dist[i][j], dist[i][edge[0]] + edge[2] + dist[edge[1]][j]);
+            }
+        }
+
+        public int shortestPath(int node1, int node2) {
+            return dist[node1][node2] == Integer.MAX_VALUE / 3 ? -1 : dist[node1][node2];
+        }
+    }
 }
