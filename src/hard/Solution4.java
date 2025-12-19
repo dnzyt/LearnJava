@@ -6,43 +6,46 @@ import java.util.Arrays;
 
 public class Solution4 {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int l1 = nums1.length, l2 = nums2.length;
-        if ((l1 + l2) % 2 == 1)
-            return findKthElement(nums1, nums2, 1 + (l1 + l2) / 2);
-        else
-            return (
-                    findKthElement(nums1, nums2, (l1 + l2) / 2) +
-                            findKthElement(nums1, nums2, 1 + (l1 + l2) / 2)
-            ) / 2.0;
+        if (nums1.length > nums2.length) {
+            int[] t = nums1;
+            nums1 = nums2;
+            nums2 = t;
+        }
+
+        int m = nums1.length, n = nums2.length;
+        int leftTotal = (m + n + 1) / 2;
+
+
+        // 开区间二分
+        int left = -1, right = m;
+        while (left + 1 < right) {
+            int i = (left + right) >>> 1;
+            int j = leftTotal - i - 2;
+
+            if (nums1[i] <= nums2[j + 1])
+                left = i;
+            else
+                right = i;
+        }
+
+        int i = left;
+        int j = leftTotal - i - 2;
+
+        int ai = i < 0 ? Integer.MIN_VALUE : nums1[i];
+        int bj = j < 0 ? Integer.MIN_VALUE : nums2[j];
+        int ai1 = i + 1 == m ? Integer.MAX_VALUE : nums1[i + 1];
+        int bj1 = j + 1 == n ? Integer.MAX_VALUE : nums2[j + 1];
+
+
+        int max1 = Math.max(ai, bj);
+        int min2 = Math.min(ai1, bj1);
+
+        return (m + n) % 2 == 0 ? (max1 + min2) / 2.0 : max1;
     }
 
-    private int findKthElement(int[] nums1, int[] nums2, int k) {
-        int l1 = nums1.length, l2 = nums2.length;
-        if (l1 > l2)
-            return findKthElement(nums2, nums1, k);
-        if (l1 == 0)
-            return nums2[k - 1];
-        if (k == 1)
-            return Math.min(nums1[0], nums2[0]);
-
-
-        int p1 = k / 2;
-        if (p1 > l1)
-            p1 = l1;
-        int p2 = k - p1;
-        if (nums1[p1 - 1] < nums2[p2 - 1])
-            return findKthElement(Arrays.copyOfRange(nums1, p1, l1), nums2, k - p1);
-        else
-            return findKthElement(nums1, Arrays.copyOfRange(nums2, p2, l2), k - p2);
-    }
 }
-
 /*
-XXXX X0 XXX
+j + 1 = leftTotal - (i + 1)
 
-YYYYYY Y0 YYYYYYY
-
-if nums1[x0] < nums2[y0]: 那么x0及其左边都不可能是第k个元素
-else: 那么y0及其左边都不可能是第k个元素
 
  */
