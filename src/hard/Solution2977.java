@@ -4,13 +4,12 @@ package hard;
 
 import java.util.Arrays;
 
-class Node {
-    public Node[] children = new Node[26];
-    public int sid = -1;
-}
 
 public class Solution2977 {
-
+    class Node {
+        public Node[] children = new Node[26];
+        public int sid = -1;
+    }
 
     private Node root;
     private int seq = 0;
