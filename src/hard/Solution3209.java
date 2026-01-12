@@ -26,4 +26,24 @@ public class Solution3209 {
         }
         return left;
     }
+
+    // 三指针
+    public long countSubarrays2(int[] nums, int k) {
+        int ans = 0;
+        int n = nums.length;
+        int left = 0, right = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if ((nums[j] & nums[i]) == nums[j])
+                    break;
+                nums[j] &= nums[i];
+            }
+            while (left <= i && nums[left] < k)
+                left++;
+            while (right <= i && nums[right] <= k)
+                right++;
+            ans += right - left;
+        }
+        return ans;
+    }
 }

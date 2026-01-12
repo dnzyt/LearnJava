@@ -2,6 +2,11 @@ package medium;
 
 // 2411. Smallest Subarrays With Maximum Bitwise OR
 
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Solution2411 {
     // LogTrick
     public int[] smallestSubarrays(int[] nums) {

@@ -2,6 +2,9 @@ package medium;
 
 // 421. Maximum XOR of Two Numbers in an Array
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Solution421 {
     class Node {
         public Node[] children;
@@ -42,4 +45,31 @@ public class Solution421 {
         return ans;
     }
 
+    // 试填法
+    public int findMaximumXOR2(int[] nums) {
+        int n = nums.length;
+        int maxVal = Integer.MIN_VALUE;
+        for (int num : nums)
+            maxVal = Math.max(maxVal, num);
+
+        int width = 32 - Integer.numberOfLeadingZeros(maxVal);
+
+        int ans = 0;
+        Set<Integer> seen = new HashSet<>();
+        int highBits = 0;
+        for (int i = width - 1; i >= 0; i--) {
+            int target = ans | (1 << i);
+            highBits |= (1 << i);
+            seen.clear();
+            for (int j = 0; j < n; j++) {
+                int x = nums[j] & highBits;
+                if (seen.contains(target ^ x)) {
+                    ans = target;
+                    break;
+                }
+                seen.add(x);
+            }
+        }
+        return ans;
+    }
 }
