@@ -30,4 +30,31 @@ public class Solution233 {
             memo[i][cnt1] = ans;
         return ans;
     }
+
+    public int countDigitOne2(int n) {
+        s = Integer.toString(n).toCharArray();
+        memo = new int[s.length][];
+        return dfs2(0, true)[1];
+    }
+
+    // 返回从i往后合法的数字个数和1的总数
+    private int[] dfs2(int i, boolean isLimited) {
+        if (i == s.length)
+            return new int[]{1, 0};
+
+        if (!isLimited && memo[i] != null)
+            return memo[i];
+        int up = isLimited ? s[i] - '0' : 9;
+        int cnt = 0, sum = 0;
+        for (int d = 0; d <= up; d++) {
+            int[] a = dfs2(i + 1, isLimited && d == up);
+            cnt += a[0];
+            sum += a[1];
+            if (d == 1)
+                sum += a[0];
+        }
+        if (!isLimited)
+            memo[i] = new int[]{cnt, sum};
+        return new int[]{cnt, sum};
+    }
 }
