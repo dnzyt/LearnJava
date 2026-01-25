@@ -5,6 +5,7 @@ package medium;
 public class Solution213 {
     public int rob(int[] nums) {
         int n = nums.length;
+        // 特判nums里只有一个元素的情况
         return Math.max(nums[0] + rob2(nums, 2, n - 1), rob2(nums, 1, n));
     }
 
@@ -23,7 +24,7 @@ public class Solution213 {
     private int rob2(int[] nums, int start, int end) {
         int f0 = 0;
         int f1 = 0;
-        for (int i = start; i < end; i ++) {
+        for (int i = start; i < end; i++) {
             int newF = Math.max(f0 + nums[i], f1);
             f0 = f1;
             f1 = newF;
