@@ -1,5 +1,9 @@
 package medium;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Solution304 {
 
     static class NumMatrix {

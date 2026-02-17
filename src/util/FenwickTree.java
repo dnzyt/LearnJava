@@ -2,24 +2,25 @@ package util;
 
 public class FenwickTree {
     // 索引0的位置空出来不用
-    public int[] sum;
+    public int[] tree;
 
     public FenwickTree(int n) {
         // 初始值必须都为0
-        this.sum = new int[n + 1];
+        this.tree = new int[n + 1];
     }
 
     public void update(int i, int delta) {
-        while (i < sum.length) {
-            this.sum[i] += delta;
+        while (i < tree.length) {
+            this.tree[i] += delta;
             i += lowbit(i);
         }
     }
 
+    // 求前缀和[1~i]
     public int query(int i) {
         int res = 0;
         while (i > 0) {
-            res += this.sum[i];
+            res += this.tree[i];
             i -= lowbit(i);
         }
         return res;
