@@ -38,4 +38,30 @@ public class Solution583 {
         }
         return f[m][n];
     }
+
+    // 一维数组写法
+    public int minDistance2(String word1, String word2) {
+        char[] a = word1.toCharArray();
+        char[] b = word2.toCharArray();
+        int m = a.length;
+        int n = b.length;
+
+        int[] f = new int[n + 1];
+        for (int j = 0; j <= n; j++)
+            f[j] = j;
+
+        for (int i = 1; i <= m; i++) {
+            int pre = f[0];
+            f[0] = i;
+            for (int j = 1; j <= n; j++) {
+                int temp = f[j];
+                if (a[i - 1] == b[j - 1])
+                    f[j] = pre;
+                else
+                    f[j] = Math.min(f[j - 1], f[j]) + 1;
+                pre = temp;
+            }
+        }
+        return f[n];
+    }
 }
