@@ -17,7 +17,9 @@ package hard;
  * */
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Solution2835 {
 
@@ -28,9 +30,9 @@ public class Solution2835 {
             int digit = 1;
             while (num != digit) {
                 digit <<= 1;
-                idx ++;
+                idx++;
             }
-            counter[idx] ++;
+            counter[idx]++;
         }
 
         int i = 0;
@@ -39,24 +41,24 @@ public class Solution2835 {
             if (((target >> i) & 1) == 1) {
                 if (counter[i] >= 1) {
                     counter[i + 1] += (counter[i] - 1) / 2;
-                    i ++;
+                    i++;
                     continue;
                 } else {
                     int j = i + 1;
                     while (j < 32) {
                         if (counter[j] > 0) {
-                            counter[j] --;
+                            counter[j]--;
                             res += (j - i);
                             i = j;
                             break;
                         }
-                        j ++;
+                        j++;
                     }
                     if (j == 32) return -1;
                 }
             } else {
                 counter[i + 1] += counter[i] / 2;
-                i ++;
+                i++;
             }
         }
 
@@ -64,6 +66,35 @@ public class Solution2835 {
         return res;
     }
 
+    // 贪心
+    public int minOperations2(List<Integer> nums, int target) {
+        long sum = 0;
+        Map<Integer, Integer> cnt = new HashMap<>();
+        for (int num : nums) {
+            sum += num;
+            cnt.merge(num, 1, Integer::sum);
+        }
+        if (sum < target)
+            return -1;
+
+        long s = 0;
+        int i = 0, ans = 0;
+        while ((1l << i) <= target) {
+            s += (long) cnt.getOrDefault(1 << i, 0) << i;
+            long mask = (1l << (i + 1)) - 1;
+            if (s >= (target & mask)) {
+                i++;
+                continue;
+            }
+            ans++;
+            i++;
+            while (cnt.getOrDefault(1 << i, 0) == 0) {
+                i++;
+                ans++;
+            }
+        }
+        return ans;
+    }
 }
 
 
