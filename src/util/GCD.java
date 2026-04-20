@@ -2,18 +2,18 @@ package util;
 
 public class GCD {
     public static long gcd(long a, long b) {
-        if (b == 0)
-            return a;
-        return gcd(b, a % b);
+        if (a == 0)
+            return b;
+        return gcd(b % a, a);
     }
 
     private int gcd(int x, int y) {
-        while (y > 0) {
-            int t = x % y;
-            x = y;
-            y = t;
+        while (x != 0) {
+            int tmp = x;
+            x = y % x;
+            y = tmp;
         }
-        return x;
+        return y;
     }
 
 

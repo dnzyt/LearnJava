@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class Solution32 {
+
     // 自己的解法
     // 左括号用来统计它所包含的valid字串的长度
     public int longestValidParentheses(String s) {
@@ -45,6 +46,26 @@ public class Solution32 {
                     ans = Math.max(ans, i - st.peek());
                 }
             }
+        }
+        return ans;
+    }
+
+    // DP
+    // 以i结尾往左能组成多长的合法括号
+    public int longestValidParentheses4(String s) {
+        int n = s.length();
+        char[] chs = s.toCharArray();
+        int[] dp = new int[n];
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            if (chs[i] == '(')
+                continue;
+
+            int l = dp[i - 1];
+            if (i - 1 - l >= 0 && chs[i - 1 - l] == '(')
+                dp[i] = 2 + dp[i - 1] + ((i - 2 - l) > 0 ? dp[i - 2 - l] : 0);
+
+            ans = Math.max(ans, dp[i]);
         }
         return ans;
     }

@@ -2,41 +2,55 @@ package hard;
 
 // 952. Largest Component Size by Common Factor
 
-import util.UnionFind;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
 public class Solution952 {
     private static final int MX = 100000;
+    private int[] parent;
+    private int[] size;
 
     public int largestComponentSize(int[] nums) {
-        int n = nums.length;
-        int[] lpf = new int[MX + 1];
+        int[] lpf = new int[MX + 1]; // Least Prime Factor
         lpf[1] = 1;
         for (int i = 2; i <= MX; i++) {
-            if (lpf[i] == 0) {
+            if (lpf[i] == 0)
                 lpf[i] = i;
-                for (int j = i * i; j > 0 && j <= MX; j += i) {
-                    if (lpf[j] == 0)
-                        lpf[j] = i;
-                }
-            }
+            for (int j = i * i; j > 0 && j <= MX; j += i)
+                if (lpf[j] == 0)
+                    lpf[j] = i;
         }
-        UnionFind uf = new UnionFind(n + MX);
-        for (int i = 0; i < n; i++) {
+        parent = new int[MX * 2 + 1];
+        size = new int[MX * 2 + 1];
+        Arrays.fill(size, 0, MX, 1);
+        for (int i = 0; i < parent.length; i++)
+            parent[i] = i;
+        int ans = 0;
+        for (int i = 0; i < nums.length; i++) {
             int x = nums[i];
             while (x > 1) {
                 int p = lpf[x];
                 while (p == lpf[x])
                     x /= p;
-                uf.merge(i, n + p); // merge的是索引
+                merge(p + MX, i);
             }
+            ans = Math.max(ans, size[find(i)]);
         }
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            map.merge(uf.find(i), 1, Integer::sum);
-        }
-        return map.values().stream().max(Integer::compareTo).get();
+        return ans;
+    }
+
+    private int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    private boolean merge(int x, int y) {
+        int px = find(x), py = find(y);
+        if (px == py)
+            return false;
+        parent[px] = py;
+        size[py] += size[px];
+        return true;
     }
 }
