@@ -57,4 +57,29 @@ public class Solution72 {
 
         return f[m][n];
     }
+
+    // 空间压缩，左上角滚动
+    public int minDistance3(String word1, String word2) {
+        char[] s = word1.toCharArray();
+        char[] t = word2.toCharArray();
+        int m = s.length, n = t.length;
+
+        int[] dp = new int[n + 1];
+        for (int j = 0; j < n; j++)
+            dp[j + 1] = j + 1;
+        for (int i = 0; i < m; i++) {
+            int leftup = dp[0];
+            dp[0] = i + 1;
+            for (int j = 0; j < n; j++) {
+                int tmp = dp[j + 1];
+                if (s[i] == t[j])
+                    dp[j + 1] = leftup;
+                else
+                    dp[j + 1] = Math.min(Math.min(dp[j], dp[j + 1]), leftup) + 1;
+                leftup = tmp;
+            }
+        }
+        return dp[n];
+    }
+
 }

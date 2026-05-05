@@ -6,19 +6,12 @@ import java.util.*;
 
 public class Solution2406 {
     public int minGroups(int[][] intervals) {
-        Arrays.sort(intervals, Comparator.comparing(a -> a[0]));
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
         PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for (int[] itvl : intervals) {
-            if (pq.isEmpty())
-                pq.offer(itvl[1]);
-            else {
-                if (itvl[0] > pq.peek()) {
-                    pq.poll();
-                    pq.offer(itvl[1]);
-                } else {
-                    pq.offer(itvl[1]);
-                }
-            }
+        for (int[] i : intervals) {
+            if (!pq.isEmpty() && pq.peek() < i[0])
+                pq.poll();
+            pq.offer(i[1]);
         }
         return pq.size();
     }
