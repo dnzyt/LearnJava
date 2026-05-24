@@ -20,4 +20,24 @@ public class GCD {
     public static long lcm(long a, long b) {
         return a / gcd(a, b) * b;
     }
+
+
+    // 扩展欧几里得算法
+    // ans[0] -> gcd
+    // ans[1] -> 逆元 (a, b需互质）
+    public static int[] exGcd(int a, int b) {
+        int[] ans = new int[3];
+        if (b == 0) {
+            ans[0] = a;
+            ans[1] = 1;
+            ans[2] = 0;
+        } else {
+            ans = exGcd(b, a % b);
+            int tempX = ans[1];
+            int tempY = ans[2];
+            ans[1] = tempY;
+            ans[2] = tempX - tempY * (a / b);
+        }
+        return ans;
+    }
 }

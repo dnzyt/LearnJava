@@ -9,27 +9,26 @@ import java.util.List;
 
 public class Solution3480 {
     public long maxSubarrays(int n, int[][] conflictingPairs) {
-        List<Integer>[] groups = new ArrayList[n + 1];
-        Arrays.setAll(groups, i -> new ArrayList<>());
+        List<Integer>[] g = new List[n + 1];
+        Arrays.setAll(g, i -> new ArrayList<>());
         for (int[] p : conflictingPairs) {
-            int a = p[0];
-            int b = p[1];
-            groups[Math.min(a, b)].add(Math.max(a, b));
+            g[Math.min(p[0], p[1])].add(Math.max(p[0], p[1]));
         }
-        List<Integer> b = new ArrayList<>(List.of(n + 1, n + 1));
-        long ans = 0;
-        long[] extra = new long[n + 2];
-        long mx = -1;
+        long ans = 0l;
+        long[] extra = new long[n + 1];
+        long mxExtra = 0l;
+        List<Integer> b = new ArrayList<>();
+        b.add(n + 1);
+        b.add(n + 1);
         for (int i = n; i > 0; i--) {
-            b.addAll(groups[i]);
+            b.addAll(g[i]);
             Collections.sort(b);
             b.subList(2, b.size()).clear();
-            int b0 = b.get(0);
-            int b1 = b.get(1);
-            ans += b0 - i;
-            extra[b0] += b1 - b0;
-            mx = Math.max(mx, extra[b0]);
+            ans += b.get(0) - i;
+            extra[b.get(0)] += b.get(1) - b.get(0);
+            mxExtra = Math.max(mxExtra, extra[b.get(0)]);
         }
-        return ans + mx;
+
+        return ans + mxExtra;
     }
 }

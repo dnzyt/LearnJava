@@ -20,9 +20,25 @@ public class Solution1312 {
                 if (s1.charAt(i - 1) == s2.charAt(j - 1))
                     dp[i][j] = dp[i - 1][j - 1] + 1;
                 else
-                    dp[i][j] = Integer.max(dp[i - 1][j], dp[i][j  -1]);
+                    dp[i][j] = Integer.max(dp[i - 1][j], dp[i][j - 1]);
             }
         return dp[m][n];
+    }
+
+    // 区间dp
+    public int minInsertions2(String s) {
+        char[] chs = s.toCharArray();
+        int n = chs.length;
+        int[][] dp = new int[n][n];
+        for (int l = n - 2; l >= 0; l--) {
+            for (int r = l + 1; r < n; r++) {
+                if (chs[l] == chs[r])
+                    dp[l][r] = dp[l + 1][r - 1];
+                else
+                    dp[l][r] = Math.min(dp[l + 1][r], dp[l][r - 1]) + 1;
+            }
+        }
+        return dp[0][n - 1];
     }
 }
 

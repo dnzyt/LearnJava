@@ -13,7 +13,7 @@ public class SparseTable {
         st = new int[n][l];
         // 建表
         for (int i = 0; i < n; i++)
-            st[i][0] = arr[i];
+            st[i][0] = arr[i]; // 从i开始，长度为1的区间
         for (int p = 1; p < l; p++) {
             for (int i = 0; i + (1 << p) - 1 < n; i++) {
                 st[i][p] = Math.max(st[i][p - 1], st[i + (1 << (p - 1))][p - 1]);
