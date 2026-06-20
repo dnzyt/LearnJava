@@ -1,10 +1,10 @@
 package util;
 
 public class GCD {
-    public static long gcd(long a, long b) {
-        if (a == 0)
-            return b;
-        return gcd(b % a, a);
+    public static long gcd(long x, long y) {
+        if (x == 0)
+            return y;
+        return gcd(y % x, x);
     }
 
     private int gcd(int x, int y) {

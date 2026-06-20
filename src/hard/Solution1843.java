@@ -36,5 +36,6 @@ public class Solution1843 {
             }
             return node;
         }
+        
     }
 }

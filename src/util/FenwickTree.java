@@ -2,16 +2,16 @@ package util;
 
 public class FenwickTree {
     // 索引0的位置空出来不用
-    public int[] tree;
+    public int[] c;
 
     public FenwickTree(int n) {
         // 初始值必须都为0
-        this.tree = new int[n + 1];
+        this.c = new int[n + 1];
     }
 
     public void update(int i, int delta) {
-        while (i < tree.length) {
-            this.tree[i] += delta;
+        while (i < c.length) {
+            this.c[i] += delta;
             i += lowbit(i);
         }
     }
@@ -20,10 +20,30 @@ public class FenwickTree {
     public int query(int i) {
         int res = 0;
         while (i > 0) {
-            res += this.tree[i];
+            res += this.c[i];
             i -= lowbit(i);
         }
         return res;
+    }
+
+
+    // 求第k小的值
+    public int kth(int k) {
+        int pos = 0;
+        int p = 1;
+        // 找到能跳的最远的2的幂
+        while (p * 2 <= c.length)
+            p *= 2;
+
+        while (p > 0) {
+            int nxt = pos + p;
+            if (nxt <= c.length && c[nxt] < k) {
+                k -= c[nxt];
+                pos = nxt;
+            }
+            p /= 2;
+        }
+        return pos + 1;
     }
 
     private int lowbit(int x) {
@@ -64,6 +84,47 @@ class FenwickTree {
         }
         return ans;
     }
+
+    private int lowbit(int i) {
+        return i & -i;
+    }
+}
+*/
+
+/* 维护区间最大值
+class FenwickTree {
+    private int[] tree; // max
+    private int[] nums;
+
+    public FenwickTree(int n) {
+        tree = new int[n + 1];
+        nums = new int[n + 1];
+    }
+
+    public void update(int i, int val) {
+        nums[i] = val;
+        while (i < tree.length) {
+            tree[i] = nums[i];
+            int lb = lowbit(i);
+            for (int j = 1; j < lb; j <<= 1)
+                tree[i] = Math.max(tree[i], tree[i - j]);
+            i += lowbit(i);
+        }
+    }
+
+    public int query(int left, int right) {
+        int ans = Integer.MIN_VALUE;
+        while (left <= right) {
+            ans = Math.max(ans, nums[right]);
+            right--;
+            while (right - lowbit(right) >= left) {
+                ans = Math.max(ans, tree[right]);
+                right -= lowbit(right);
+            }
+        }
+        return ans;
+    }
+
 
     private int lowbit(int i) {
         return i & -i;

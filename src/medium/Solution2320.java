@@ -5,20 +5,23 @@ package medium;
 import java.util.TreeMap;
 
 public class Solution2320 {
-    private static final long MOD = 1000000007L;
+    private static final int MOD = 1000000007;
+    private static final int MX = 10000;
+    private static boolean initialzed;
+    private static int[] f;
+
+    public Solution2320() {
+        if (initialzed)
+            return;
+        initialzed = true;
+        f = new int[MX + 1];
+        f[0] = 1;
+        f[1] = 2;
+        for (int i = 2; i <= MX; i++)
+            f[i] = (f[i - 1] + f[i - 2]) % MOD;
+    }
 
     public int countHousePlacements(int n) {
-
-        long[] f1 = new long[]{1L, 1L, 1L, 1L};
-        for (int i = 1; i < n; i++) {
-            long[] newf = new long[]{
-                    (f1[0] + f1[1] + f1[2] + f1[3]) % MOD,
-                    (f1[0] + f1[2]) % MOD,
-                    (f1[0] + f1[1]) % MOD,
-                    f1[0] % MOD
-            };
-            f1 = newf;
-        }
-        return (int) ((f1[0] + f1[1] + f1[2] + f1[3]) % MOD);
+        return (int) (((long) f[n] * f[n]) % MOD);
     }
 }
