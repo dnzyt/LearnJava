@@ -24,7 +24,7 @@ public class Solution2354 {
         for (int bit1 : cnt.keySet())
             for (int bit2 : cnt.keySet())
                 if (bit1 + bit2 >= k)
-                    res += (cnt.get(bit1) * cnt.get(bit2));
+                    res += ((long) cnt.get(bit1) * cnt.get(bit2));
 
         return res;
     }
