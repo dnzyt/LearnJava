@@ -6,35 +6,24 @@ import java.util.*;
 
 public class Solution316 {
     public String removeDuplicateLetters(String s) {
-        char[] letters = s.toCharArray();
-        Set<Character> visited = new HashSet<>();
-        Map<Character, Integer> counter = new HashMap<>();
-        for (char ch : letters) {
-            int cnt = 0;
-            if (counter.containsKey(ch))
-                cnt = counter.get(ch);
-            counter.put(ch, cnt + 1);
-        }
-        Stack<Integer> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            if (!visited.contains(letters[i])) {
-                while (!stack.empty() && letters[stack.peek()] > letters[i] && counter.get(letters[stack.peek()]) > 0) {
-                    Character curr = letters[stack.pop()];
-                    visited.remove(curr);
-                }
-                stack.add(i);
-                visited.add(letters[i]);
-            }
-            int cnt = counter.get(letters[i]);
-            counter.put(letters[i], cnt - 1);
-        }
-
+        int[] cnt = new int[26];
+        boolean[] visited = new boolean[26];
+        char[] chs = s.toCharArray();
+        for (char c : chs)
+            cnt[c - 'a']++;
         StringBuilder sb = new StringBuilder();
-        while (!stack.empty()) {
-            sb.append(letters[stack.pop()]);
+        for (char c : chs) {
+            cnt[c - 'a']--;
+            if (visited[c - 'a'])
+                continue;
+            while (!sb.isEmpty() && cnt[sb.charAt(sb.length() - 1) - 'a'] > 0 && sb.charAt(sb.length() - 1) > c) {
+                char last = sb.charAt(sb.length() - 1);
+                visited[last - 'a'] = false;
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            visited[c - 'a'] = true;
+            sb.append(c);
         }
-        sb.reverse();
         return sb.toString();
-
     }
 }
