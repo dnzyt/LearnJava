@@ -25,4 +25,27 @@ public class Solution1190 {
         }
         return sb.toString();
     }
+
+    // 递归解法
+    public String reverseParentheses2(String s) {
+        char[] chs = s.toCharArray();
+        return dfs(chs).toString();
+    }
+
+    private int i;
+
+    private StringBuilder dfs(char[] chs) {
+        StringBuilder sb = new StringBuilder();
+        while (i < chs.length) {
+            char c = chs[i++];
+            if (c == '(') {
+                sb.append(dfs(chs));
+            } else if (c == ')') {
+                return sb.reverse();
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb;
+    }
 }
