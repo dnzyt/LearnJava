@@ -5,19 +5,16 @@ package medium;
 public class Solution1186 {
     public int maximumSum(int[] arr) {
         int n = arr.length;
-        int[] dp = new int[n];
-        dp[0] = arr[0];
-        int res = dp[0];
-        for (int i = 1; i < n; i++) {
-            dp[i] = Math.max(0, dp[i - 1]) + arr[i];
-            res = Math.max(res, dp[i]);
+        int[][] f = new int[n + 1][2];
+        // 0 - 一次都没删除过
+        // 1 - 已经删除过一次了
+        f[0][0] = f[0][1] = Integer.MIN_VALUE / 2;
+        int ans = Integer.MIN_VALUE / 2;
+        for (int i = 1; i <= n; i++) { // 以i为结尾的子数组
+            f[i][0] = Math.max(f[i - 1][0], 0) + arr[i - 1];
+            f[i][1] = Math.max(f[i - 1][1] + arr[i - 1], f[i - 1][0]);
+            ans = Math.max(ans, Math.max(f[i][0], f[i][1]));
         }
-        int revMax = arr[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            if (i - 1 >= 0)
-                res = Math.max(res, dp[i - 1] + revMax);
-            revMax = Math.max(revMax, 0) + arr[i];
-        }
-        return res;
+        return ans;
     }
 }

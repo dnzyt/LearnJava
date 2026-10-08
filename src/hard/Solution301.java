@@ -9,68 +9,126 @@ import java.util.Set;
 
 public class Solution301 {
 
-    // 把需要删除的点记录在path中
-    private List<Integer> path = new ArrayList<>();
-    private Set<String> p = new HashSet<>();
-
+    // BFS， 每次删除一个字符，最先成为valid的字符串就是答案
     public List<String> removeInvalidParentheses(String s) {
-        int left = 0; // 需要删除的左括号数量
-        int right = 0; // 需要删除的右括号数量
-        char[] c = s.toCharArray();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] == '(') left ++;
-            if (c[i] == ')') {
-                if (left > 0) {
-                    left --;
-                } else {
-                    right ++;
-                }
-            }
-        }
-        dfs(0, s.toCharArray(), left, right);
+        Set<String> set = new HashSet<>();
         List<String> ans = new ArrayList<>();
-        ans.addAll(p);
-        return ans;
-    }
+        set.add(s);
 
-    private void dfs(int i, char[] s, int left, int right) {
-        if (left + right > s.length - i) return;
-        if (i == s.length) {
-            if (left == 0 && right == 0) {
-                StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < s.length; j++) {
-                    if (!path.contains(j)) sb.append(s[j]);
-                }
-                String c = sb.toString();
-                if (isValid(c)) p.add(c);  // 判断删除括号之后的string是否合法
+        while (true) {
+            for (String x : set) {
+                if (isValid(x))
+                    ans.add(x);
             }
-            return;
+            if (!ans.isEmpty())
+                return ans;
+            Set<String> curr = new HashSet<>();
+            for (String x : set) {
+                for (int i = 0; i < x.length(); i++)
+                    curr.add(x.substring(0, i) + x.substring(i + 1));
+            }
+            set = curr;
         }
-
-        // 用一次删除括号的机会还是不用
-        if (s[i] == '(' && left > 0) {
-            path.add(i);
-            dfs(i + 1, s, left - 1, right);
-            path.remove(path.size() - 1);
-        }
-        if (s[i] == ')' && right > 0) {
-            path.add(i);
-            dfs(i + 1, s, left, right - 1);
-            path.remove(path.size() - 1);
-        }
-        dfs(i + 1, s, left, right);
     }
 
     private boolean isValid(String s) {
-        char[] a = s.toCharArray();
-        int count = 0;
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] == '(') count ++;
-            else if (a[i] == ')') {
-                count --;
-                if (count < 0) return false;
+        int left = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == '(')
+                left++;
+            else if (ch == ')') {
+                if (left == 0)
+                    return false;
+                left--;
             }
         }
-        return count == 0;
+        return left == 0;
     }
+
+    // 选 或 不选
+    public List<String> removeInvalidParentheses2(String s) {
+        int n = s.length();
+        int target = 0, left = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == '(') {
+                target++;
+                left++;
+            }
+            else if (ch == ')' && left > 0)
+                left--;
+        }
+        target -= left;
+        List<String> ans = new ArrayList<>();
+        dfs(0, 0, 0, target, s.toCharArray(), new StringBuilder(), ans);
+        return ans;
+    }
+
+    private void dfs(int i, int left, int right, int target, char[] s, StringBuilder path, List<String> ans) {
+        int n = s.length;
+        if (left < right || left > target || left + right + n - i < target * 2)
+            return;
+        if (i == n) {
+            ans.add(path.toString());
+            return;
+        }
+        char ch = s[i];
+        if (ch == '(' || ch == ')') {
+            int j = i + 1;
+            while (j < n && s[j] == ch) {
+                j++;
+            }
+            dfs(j, left, right, target, s, path, ans);
+        }
+        if (ch == '(')
+            left++;
+        else if (ch == ')')
+            right++;
+        path.append(ch);
+        dfs(i + 1, left, right, target, s, path, ans);
+        path.deleteCharAt(path.length() - 1);
+    }
+
+    // 枚举选哪个
+    public List<String> removeInvalidParentheses3(String s) {
+        int target = 0, left = 0, alpha = 0;
+        char[] chs = s.toCharArray();
+        for (char ch : chs) {
+            if (ch == '(') {
+                target++;
+                left++;
+            } else if (ch == ')') {
+                if (left > 0)
+                    left--;
+            } else
+                alpha++;
+        }
+        target -= left;
+        int total = target * 2 + alpha;
+        List<String> ans = new ArrayList<>();
+        dfs(0, 0, 0, target, total, chs, new StringBuilder(), ans);
+        return ans;
+    }
+
+    private void dfs(int i, int left, int right, int target, int total, char[] s, StringBuilder sb, List<String> ans) {
+        int n = s.length;
+        if (left < right || left > target || left + right + n - i < target * 2)
+            return;
+        if (sb.length() == total) {
+            ans.add(sb.toString());
+            return;
+        }
+        for (int j = i; j < n; j++) {
+            char ch = s[j];
+            if (j > i && ch == s[j - 1])
+                continue;
+            sb.append(ch);
+            dfs(j + 1, left + (s[j] == '(' ? 1 : 0), right + (s[j] == ')' ? 1 : 0), target, total, s, sb, ans);
+            sb.deleteCharAt(sb.length() - 1);
+            if (ch != '(' && ch != ')')
+                break;
+        }
+    }
+
+
+
 }
