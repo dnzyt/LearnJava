@@ -4,18 +4,18 @@ package medium;
 
 public class Solution50 {
     public double myPow(double x, int n) {
-        double ans = 1;
-        long nn = n;
-        if (nn < 0) {
-            nn = -nn;
-            x = 1 / x;
-        }
-        while (nn > 0) {
-            if ((nn & 1) > 0) {
+        if (n < 0)
+            return 1 / power(x, - (long) n);
+        return power(x, n);
+    }
+
+    private double power(double x, long n) {
+        double ans = 1.0;
+        while (n > 0) {
+            if ((n & 1) > 0)
                 ans *= x;
-            }
             x *= x;
-            nn >>= 1;
+            n >>= 1;
         }
         return ans;
     }
